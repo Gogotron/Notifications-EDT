@@ -51,13 +51,16 @@ def isnt_for_PI(e):
 def remove_non_PI(L):
 	return filter(lambda e:not isnt_for_PI(e),L)
 
-from time import time,localtime,mktime,strptime
+from time import time,localtime,mktime,strptime,tzset
+from os import environ
+environ["TZ"] = 'CET'
+tzset()
 def current_timeint():
-	t = localtime(time()+60*60*2) # UTC -> CTE
+	t = localtime() # UTC -> CTE
 	year,month,day,hour,minute=t.tm_year,t.tm_mon,t.tm_mday,t.tm_hour,t.tm_min
 	return ((((year*100+month)*100+day)*100+hour)*100+minute)
 def current_dateint():
 	return current_timeint()//100**2
 
 def event_to_seconds(e):
-	return mktime(strptime(str(e["timeint"]),"%Y%m%d%H%M"))-60*60*2 # CTE -> UTC
+	return mktime(strptime(str(e["timeint"]),"%Y%m%d%H%M")) # CTE -> UTC
