@@ -101,6 +101,8 @@ async def on_message(message):
 	if message.content == "$minecraft":
 		await message.author.add_roles(get(message.guild.roles,id=836949920488488970))
 		await message.reply("Tu devrais maintenant avoir le rôle 'Minecraft'.")
+	if message.content == "$portal":
+		await message.reply("Il est très bien le jeu, mais n'y a pas de rôle correspondant.")
 
 async def send_to_discord(e, notify=True, reply_to=None):
 	if e["category"] in ('Examens Licences', 'Examens'): notify = False
