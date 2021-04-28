@@ -1,6 +1,7 @@
 from keep_alive import keep_alive
 from discord import Client
 from discord.ext.tasks import loop
+from discord.utils import get
 from os import getenv
 from time import time, sleep
 
@@ -97,7 +98,9 @@ async def on_message(message):
 		await send_to_discord(e, False, message)
 	if message.content.startswith("$sendsend"):
 		await client.get_channel(channel).send(message.content[10:])
-
+  if message.content == "$minecraft":
+    await message.author.add_roles(get(message.server.roles,id=836949920488488970))
+    await message.reply("Tu devrais maintenant avoir le rôle 'Minecraft'.")
 
 async def send_to_discord(e, notify=True, reply_to=None):
 	if e["category"] in ('Examens Licences', 'Examens'): notify = False
