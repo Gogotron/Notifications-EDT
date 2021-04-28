@@ -100,6 +100,7 @@ async def on_message(message):
 		await client.get_channel(channel).send(message.content[10:])
 	if message.content == "$minecraft":
 		await message.author.add_roles(get(message.guild.roles,id=836949920488488970))
+		await message.reply("Tu devrais maintenant avoir le rôle 'Minecraft'.")
 	if message.content == "$remove-minecraft":
 		await message.author.remove_roles(get(message.guild.roles,id=836949920488488970))
 		await message.reply("Tu ne devrais plus avoir le rôle 'Minecraft'.")
