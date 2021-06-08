@@ -21,6 +21,9 @@ def get_schedule(URL):
 	soup = bs(page.content, 'html.parser')
 	events = soup.find_all('event')
 
+	return parse_events(events)
+
+def parse_events(events):
 	event_dictionnaries = []
 	for event in events:
 		edict = {}
@@ -66,8 +69,7 @@ def get_schedule(URL):
 		event["real_date"] = real_date(event["date"], event["day"])
 		event["timeint"] = timeint(event)
 
-	sort_schedule(event_dictionnaries)
-	return event_dictionnaries
+	return sorted_schedule(event_dictionnaries)
 
 def fetch_combined(urls,PI_filter=False):
 	combined_schedule = []
@@ -75,8 +77,7 @@ def fetch_combined(urls,PI_filter=False):
 		for e in remove_non_PI(s) if PI_filter else s:
 			if e not in combined_schedule:
 				combined_schedule.append(e)
-	sort_schedule(combined_schedule)
-	return combined_schedule
+	return sorted_schedule(combined_schedule)
 
 if __name__=="__main__":
 	from helper_functs import print_event

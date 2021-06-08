@@ -14,21 +14,24 @@ with open("help_text.txt", "r") as f:
 	help_text = f.read().strip()
 
 channel = 802640238664351826
-roles = (
-    "<@&802575166831067166>",  #A1
-    "<@&802575212280807494>",  #A2
-    "<@&802575231691915344>",  #A3
-    "<@&802575247391064075>",  #A4
-    "<@&802575284070514688>",  #A5
-    "<@&802573383924449280>",  #A6
-    "<@&802573021222928414>",  #B1
-    "<@&802573125212045332>",  #B2
-    "<@&802573213602283521>",  #B3
-    "<@&802573271320887306>",  #B4
-    "<@&802573341495132222>",  #B5
-    "<@&802578798444675113>",  #ISI
-    "<@&802579017102000158>",  #OPTIM
+role_ids = (
+    802575166831067166,  #A1
+    802575212280807494,  #A2
+    802575231691915344,  #A3
+    802575247391064075,  #A4
+    802575284070514688,  #A5
+    802573383924449280,  #A6
+    802573021222928414,  #B1
+    802573125212045332,  #B2
+    802573213602283521,  #B3
+    802573271320887306,  #B4
+    802573341495132222,  #B5
+    802578798444675113,  #ISI
+    802579017102000158,  #OPTIM
 )
+role_mentions = tuple(map(lambda role_id: f"<@&{role_id}", role_ids))
+roles = role_mentions
+
 group_to_role = {
     'MINF201 SERIE A (Maths/Info)': roles[0:6],
     'MINF201 SERIE B (Maths/Info)': roles[6:11],
@@ -82,20 +85,7 @@ async def on_message(message):
 	if message.content == "$ping":
 		await message.reply(f"Pong: {round(client.latency*1000)}ms")
 	if message.content.startswith("$next"):
-		pieces = message.content.split()
-		if len(pieces) > 3: return
-		group_nickname, n = "", 0
-		if len(pieces) >= 2: group_nickname = pieces[1].upper()
-		if len(pieces) >= 3: n = int(pieces[2]) - 1
-		if n < 0: return
-		if group_nickname == "":
-			if n >= len(schedule):
-				e = schedule[-1]
-			else:
-				e = schedule[n]
-		else:
-			e = next_class(n, group_nickname)
-		await send_to_discord(e, False, message)
+		next_cmd(message)
 	if message.content.startswith("$sendsend"):
 		await client.get_channel(channel).send(message.content[10:])
 	if message.content == "$minecraft":
@@ -107,33 +97,61 @@ async def on_message(message):
 	if message.content == "$portal":
 		await message.reply("Il est très bien le jeu, mais n'y a pas de rôle correspondant.")
 
-async def send_to_discord(e, notify=True, reply_to=None):
+def next_cmd(message):
+	pieces = message.content.split()
+	if len(pieces) > 3: return
+	group_nickname, n = "", 0
+	if len(pieces) >= 2: group_nickname = pieces[1].upper()
+	if len(pieces) >= 3: n = int(pieces[2]) - 1
+	if n < 0: return
+	if group_nickname == "":
+		if n >= len(schedule):
+			e = schedule[-1]
+		else:
+			e = schedule[n]
+	else:
+		e = next_class(n, group_nickname)
+	await send_to_discord(e, False, message)
+
+
+async def send_to_discord(e, notify=False, reply_to=None):
+	msg = event_message(e, notify)
+
+	if reply_to is not None:
+		await reply_to.reply(msg_txt)
+	else:
+		message_to_publish = await client.get_channel(channel).send(msg_txt)
+		await message_to_publish.publish()
+
+def event_message(e, notify):
 	if e["category"] in ('Examens Licences', 'Examens'): notify = False
 	msg_txt = ""
 
 	year, month, day = e['real_date']
-	msg_txt += f"** *{e['starttime']}-{e['endtime']}  ─  {weekdays[int(e['day'])]}  ─  {day}/{month}/{year}* **\n"
-	if e["module"]:
-		msg_txt += "**"
-		module, category = e["module"], e["category"]
-		msg_txt += module.split(" ", maxsplit=1)[1]
-		if category:
-			msg_txt += f" ({category})"
-		msg_txt += "**\n"
-	elif e["category"]:
-		msg_txt += "**" + e["category"] + "**"
+	weekday = weekdays[int(e['day'])]
+	module, category = e["module"], e["category"]
+	msg_txt += f"** *{e['starttime']}-{e['endtime']}  ─  {weekday}  ─  {day}/{month}/{year}* **\n"
+	if module[0] == "4":
+		module = module.split(" ", maxsplit=1)[1]
+	if module and category:
+		msg_txt += f"**{module} ({category})**\n"
+	if module:
+		msg_txt += f"**{module}**\n"
+	elif category:
+		msg_txt += f"**{category}**\n"
 
 	msg_txt += "```\n"
-	if e["room"]:
-		msg_txt += e["room"] + "\n"
-	if e["staff"]:
-		msg_txt += f"Prof: {', '.join(e['staff'])}\n"
-	if e["notes"]:
-		msg_txt += f"Remarques: {e['notes']}\n"
+	room, staff, notes, groups = e["room"], e["staff"], e["notes"], e["groups"],
+	if room:
+		msg_txt += f"{room}\n"
+	if staff:
+		msg_txt += f"Prof: {', '.join(staff)}\n"
+	if notes:
+		msg_txt += f"Remarques: {notes}\n"
 	group_roles = []
-	if e["groups"]:
-		for group in e["groups"]:
-			msg_txt += group + "\n"
+	if groups:
+		for group in groups:
+			msg_txt += f"{group}\n"
 			if group in group_to_role:
 				for role in group_to_role[group]:
 					if role not in group_roles:
@@ -147,20 +165,12 @@ async def send_to_discord(e, notify=True, reply_to=None):
 	if link is not None:
 		msg_txt += link + "\n"
 
-	if reply_to is not None:
-		await reply_to.reply(msg_txt)
-	else:
-		message_to_publish = await client.get_channel(channel).send(msg_txt)
-		await message_to_publish.publish()
-
-
 @loop(seconds=120)
 async def check_for_event():
 	check_for_update()
 
 	global schedule
-	while len(schedule) != 0 and event_to_seconds(
-	    schedule[0]) - time() < 15 * 60:
+	while len(schedule) != 0 and event_to_seconds(schedule[0]) - time() < 15 * 60:
 		await send_to_discord(schedule[0], notify=True)
 		del schedule[0]
 		sleep(3)
@@ -180,9 +190,8 @@ async def before_check_for_event():
 async def after_check_for_event():
 	print("After loop")
 	await client.get_channel(801041584870916118).send(
-	    "After loop: the program is no longer running.\nFreak out!\n<@310836324766580738>"
+	    "After loop: the program is no longer running.\n<@310836324766580738>"
 	)
-	await client.get_channel(801041584870916118).send(str(schedule[0]))
 
 
 def check_for_update():
@@ -200,8 +209,7 @@ def update_schedule():
 
 def remove_past_events():
 	global schedule
-	while len(schedule) != 0 and event_to_seconds(
-	    schedule[0]) - time() < 15 * 60:
+	while len(schedule) != 0 and event_to_seconds(schedule[0]) - time() < 15 * 60:
 		del schedule[0]
 
 
@@ -230,6 +238,7 @@ def corresponding_groups(group_nickname):
 	           list(group_to_role.keys())[:-3]))
 	if len(group_nickname) > 1:
 		valid_groups |= corresponding_groups(group_nickname[:-1])
+
 	if len(valid_groups) == 0:
 		return set(group_to_role.keys())
 	else:

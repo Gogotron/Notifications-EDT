@@ -3,18 +3,16 @@ def leap(y):
 
 def real_date(a,b):
 	day, month, year = map(int,a.split('/'))
-	if leap(year):
-		month_lengths = [31,29,31,30,31,30,31,31,30,31,30,31]
-	else:
-		month_lengths = [31,28,31,30,31,30,31,31,30,31,30,31]
-	plus = int(b)
-	day += plus
-	if day>month_lengths[month-1]:
-		day %= month_lengths[month-1]
-		month += 1
-		if month>12:
-			month %= 12
-			year += 1
+	month_lengths = [31,28,31,30,31,30,31,31,30,31,30,31]
+	if leap(year): month_lengths[1] = 29
+	# Take into account the offset corresponding to the day of the week.
+	offset = int(b)
+	day += offset
+	# Fix overflow from one month to the next, or one year to the next.
+	month += day//month_lengths[month-1]
+	day %= month_lengths[month-1]
+	year += month//12
+	month %= 12
 	return (year,month,day)
 
 def text_to_time(a):
@@ -41,7 +39,7 @@ def sorted_schedule(s):
 	return sorted(s,key=lambda x:x["timeint"])
 
 def isnt_for_PI(e):
-	notes = e["notes"] if e["notes"] else ""
+	notes = e["notes"] or ""
 	return any(("ne concerne que les CMI" in notes,
 				"uniquement les CMI" in notes,
 				"TD en français" == notes,
@@ -56,11 +54,11 @@ from os import environ
 environ["TZ"] = 'CET'
 tzset()
 def current_timeint():
-	t = localtime() # UTC -> CTE
+	t = localtime()
 	year,month,day,hour,minute=t.tm_year,t.tm_mon,t.tm_mday,t.tm_hour,t.tm_min
 	return ((((year*100+month)*100+day)*100+hour)*100+minute)
 def current_dateint():
 	return current_timeint()//100**2
 
 def event_to_seconds(e):
-	return mktime(strptime(str(e["timeint"]),"%Y%m%d%H%M")) # CTE -> UTC
+	return mktime(strptime(str(e["timeint"]),"%Y%m%d%H%M"))
