@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
 from helper_functs import real_date, timeint, sort_schedule, remove_non_PI
-from urls import PI_URLS, MI_URLS
+from variables import PI_URLS, MI_URLS
 
 def get_schedule(URL):
 	page = requests.get(URL)
