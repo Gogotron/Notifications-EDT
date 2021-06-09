@@ -80,7 +80,7 @@ class BotEDT(Bot):
 		return self.schedule[i-1]
 
 	async def post_event(self, e, notify=False, reply_to=None):
-		msg = event_message(e, notify)
+		msg_txt = self.event_message(e, notify)
 
 		if reply_to is not None:
 			await reply_to.reply(msg_txt)
@@ -88,7 +88,7 @@ class BotEDT(Bot):
 			message_to_publish = await self.get_channel(self.channel).send(msg_txt)
 			await message_to_publish.publish()
 
-	def event_message(e, notify):
+	def event_message(self, e, notify):
 		weekdays = ("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")
 
 		if e["category"] in ('Examens Licences', 'Examens'): notify = False
