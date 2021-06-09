@@ -5,7 +5,7 @@ from variables import channel, group_to_mention, MI_URLS, help_text
 
 def main():
 	keep_alive()
-	bot = BotEDT(channel,group_to_role_mention,MI_URLS,help_text)
+	bot = BotEDT(channel,group_to_mention,MI_URLS,help_text)
 	bot.run(getenv("TOKEN"))
 
 if __name__ == "__main__":

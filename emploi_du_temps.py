@@ -68,8 +68,8 @@ def fetch_combined(urls, PI_filter=False):
 
 if __name__=="__main__":
 	from helper_functs import print_event
-	import time
+	from time import time
 
-	start = time.time()
+	start = time()
 	sche = fetch_combined(PI_URLS,PI_filter=True)
-	print("Time:",time.time()-start)
+	print("Time:",time()-start)
