@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
 from helper_functs import real_date, timeint, sort_schedule, remove_non_PI
-from urls import PI_URLS, MI_URLS
+from variables import PI_URLS, MI_URLS
 
 def get_schedule(URL):
 	page = requests.get(URL)
@@ -68,8 +68,8 @@ def fetch_combined(urls, PI_filter=False):
 
 if __name__=="__main__":
 	from helper_functs import print_event
-	import time
+	from time import time
 
-	start = time.time()
+	start = time()
 	sche = fetch_combined(PI_URLS,PI_filter=True)
-	print("Time:",time.time()-start)
+	print("Time:",time()-start)
