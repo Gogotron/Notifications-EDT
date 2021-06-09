@@ -38,8 +38,13 @@ class BotEDT(Bot):
 		self.remove_past_events()
 		self.last_update = current_dateint()
 
+<<<<<<< HEAD
 	def remove_past_events(self):
 		while self.event_available(self):
+=======
+	def remove_past_events(selfu):
+		while self.event_available(selfu):
+>>>>>>> 9673a96b49738947d34d3bf7605ee7d07b57ce48
 			del self.schedule[0]
 
 	@loop(seconds=120)
@@ -55,13 +60,21 @@ class BotEDT(Bot):
 			self.check_for_event.stop()
 
 	@check_for_event.before_loop
+<<<<<<< HEAD
 	async def before_check_for_event(self):
+=======
+	async def before_check_for_event(selfu):
+>>>>>>> 9673a96b49738947d34d3bf7605ee7d07b57ce48
 		print("Before loop")
 		self.update_schedule()
 		await self.wait_until_ready()
 
 	@check_for_event.after_loop
+<<<<<<< HEAD
 	async def after_check_for_event(self):
+=======
+	async def after_check_for_event(selfu):
+>>>>>>> 9673a96b49738947d34d3bf7605ee7d07b57ce48
 		print("After loop")
 		await self.client.get_channel(801041584870916118).send(
 			"After loop: the program is no longer running.\n<@310836324766580738>"
