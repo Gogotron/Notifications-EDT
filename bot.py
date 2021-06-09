@@ -38,12 +38,12 @@ class BotEDT(Bot):
 		self.remove_past_events()
 		self.last_update = current_dateint()
 
-	def remove_past_events():
-		while self.event_available():
+	def remove_past_events(self):
+		while self.event_available(self):
 			del self.schedule[0]
 
 	@loop(seconds=120)
-	async def check_for_event():
+	async def check_for_event(self):
 		self.attempt_to_update()
 
 		while self.event_available():
@@ -55,20 +55,20 @@ class BotEDT(Bot):
 			self.check_for_event.stop()
 
 	@check_for_event.before_loop
-	async def before_check_for_event():
+	async def before_check_for_event(self):
 		print("Before loop")
 		self.update_schedule()
 		await self.wait_until_ready()
 
 	@check_for_event.after_loop
-	async def after_check_for_event():
+	async def after_check_for_event(self):
 		print("After loop")
 		await self.client.get_channel(801041584870916118).send(
 			"After loop: the program is no longer running.\n<@310836324766580738>"
 		)
 
-	def next_class(n, group_nickname):
-		valid_groups = corresponding_groups(group_nickname)
+	def next_class(self, n, group_nickname):
+		valid_groups = self.corresponding_groups(group_nickname)
 		i = 0
 		while n >= 0 and i < len(self.schedule):
 			if self.schedule[i]["groups"]:
@@ -79,7 +79,7 @@ class BotEDT(Bot):
 			i += 1
 		return self.schedule[i-1]
 
-	async def post_event(e, notify=False, reply_to=None):
+	async def post_event(self, e, notify=False, reply_to=None):
 		msg = event_message(e, notify)
 
 		if reply_to is not None:
@@ -132,7 +132,7 @@ class BotEDT(Bot):
 		if link is not None:
 			msg_txt += link + "\n"
 
-	def corresponding_groups(group_nickname):
+	def corresponding_groups(self,group_nickname):
 		if group_nickname == "ISI":
 			return set(('CMI ISI201 GROUPE A1', ))
 		if group_nickname == "CMI":
@@ -142,7 +142,7 @@ class BotEDT(Bot):
 			filter(lambda x: group_nickname in x.split(),
 				   list(self.group_to_mention.keys())[:-3]))
 		if len(group_nickname) > 1:
-			valid_groups |= corresponding_groups(group_nickname[:-1])
+			valid_groups |= self.corresponding_groups(group_nickname[:-1])
 
 		if len(valid_groups) == 0:
 			return set(self.group_to_mention.keys())
