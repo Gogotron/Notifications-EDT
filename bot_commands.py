@@ -16,12 +16,12 @@ async def ping(ctx):
 async def next(ctx, group_nickname="", n="1"):
 	n = int(n)-1
 	if group_nickname == "":
-		if n >= len(schedule):
-			e = schedule[-1]
+		if n >= len(ctx.bot.schedule):
+			e = ctx.bot.schedule[-1]
 		else:
-			e = schedule[n]
+			e = ctx.bot.schedule[n]
 	else:
-		e = next_class(n, group_nickname)
+		e = ctx.bot.next_class(n, group_nickname)
 	await ctx.bot.post_event(e, False, ctx)
 
 
