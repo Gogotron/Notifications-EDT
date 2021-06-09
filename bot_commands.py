@@ -14,7 +14,7 @@ async def ping(ctx):
 
 @command()
 async def next(ctx, group_nickname="", n="1"):
-    n = int(n)-1
+	n = int(n)-1
 	if group_nickname == "":
 		if n >= len(schedule):
 			e = schedule[-1]
