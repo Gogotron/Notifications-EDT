@@ -1,4 +1,4 @@
-prefix = "$""
+prefix = "$"
 
 BASE_URL = "https://apogee.u-bordeaux.fr/edt-st/Licence1/Semestre2/"
 URL_MINF_A3	  = BASE_URL+"g254484.xml"
