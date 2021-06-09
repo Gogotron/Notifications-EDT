@@ -43,7 +43,7 @@ class BotEDT(Bot):
 			del self.schedule[0]
 
 	@loop(seconds=120)
-	async def check_for_event():
+	async def check_for_event(self):
 		self.attempt_to_update()
 
 		while self.event_available():
