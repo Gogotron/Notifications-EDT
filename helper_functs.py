@@ -49,7 +49,7 @@ def isnt_for_PI(e):
 def remove_non_PI(L):
 	return filter(lambda e:not isnt_for_PI(e),L)
 
-from time import time,localtime,mktime,strptime,tzset
+from time import localtime,mktime,strptime,tzset
 from os import environ
 environ["TZ"] = 'CET'
 tzset()
