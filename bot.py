@@ -8,7 +8,7 @@ from time import time, sleep
 
 
 class BotEDT(Bot):
-	def __init__(self,prefix,channel,group_to_mention,urls,help_text):
+	def __init__(self, prefix, channel, group_to_mention, urls, help_text):
 		super().__init__(command_prefix="$")
 		self.remove_command("help")
 		for command in bot_commands:
@@ -27,7 +27,10 @@ class BotEDT(Bot):
 		print(f"We have logged in as {self.user}")
 
 	def event_available(self):
-		return len(self.schedule) != 0 and event_to_seconds(self.schedule[0]) - time() < 15 * 60
+		return (
+			len(self.schedule) != 0
+			and event_to_seconds(self.schedule[0]) - time() < 15 * 60
+		)
 
 	def attempt_to_update(self):
 		if self.last_update != current_dateint():
@@ -77,7 +80,7 @@ class BotEDT(Bot):
 						n -= 1
 						break
 			i += 1
-		return self.schedule[i-1]
+		return self.schedule[i - 1]
 
 	async def post_event(self, e, notify=False, reply_to=None):
 		msg_txt = self.event_message(e, notify)
@@ -91,13 +94,20 @@ class BotEDT(Bot):
 	def event_message(self, e, notify):
 		weekdays = ("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")
 
-		if e["category"] in ('Examens Licences', 'Examens'): notify = False
+		if e["category"] in ('Examens Licences', 'Examens'):
+			notify = False
 		msg_txt = ""
 
 		year, month, day = e['real_date']
 		weekday = weekdays[int(e['day'])]
 		module, category = e["module"], e["category"]
-		msg_txt += f"** *{e['starttime']}-{e['endtime']}  ─  {weekday}  ─  {day}/{month}/{year}* **\n"
+		msg_txt += (
+			f"** *"
+			f"{e['starttime']}-{e['endtime']}"
+			f"  ─  {weekday}  ─  "
+			f"{day}/{month}/{year}"
+			f"* **\n"
+		)
 		if module[0] == "4":
 			module = module.split(" ", maxsplit=1)[1]
 		if module and category:
@@ -132,15 +142,18 @@ class BotEDT(Bot):
 		if link is not None:
 			msg_txt += link + "\n"
 
-	def corresponding_groups(self,group_nickname):
+	def corresponding_groups(self, group_nickname):
 		if group_nickname == "ISI":
 			return set(('CMI ISI201 GROUPE A1', ))
 		if group_nickname == "CMI":
 			return set(('CMI OPTIM 201', ))
 
 		valid_groups = set(
-			filter(lambda x: group_nickname in x.split(),
-				   list(self.group_to_mention.keys())[:-3]))
+			filter(
+				lambda x: group_nickname in x.split(),
+				list(self.group_to_mention.keys())[:-3]
+			)
+		)
 		if len(group_nickname) > 1:
 			valid_groups |= self.corresponding_groups(group_nickname[:-1])
 

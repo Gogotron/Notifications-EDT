@@ -14,7 +14,7 @@ async def ping(ctx):
 
 @command()
 async def next(ctx, group_nickname="", n="1"):
-	n = int(n)-1
+	n = int(n) - 1
 	if group_nickname == "":
 		if n >= len(ctx.bot.schedule):
 			e = ctx.bot.schedule[-1]
@@ -32,19 +32,23 @@ async def sendsend(ctx):
 
 @command()
 async def minecraft(ctx):
-	await ctx.author.add_roles(get(ctx.guild.roles,id=836949920488488970))
+	await ctx.author.add_roles(get(ctx.guild.roles, id=836949920488488970))
 	await ctx.reply("Tu devrais maintenant avoir le rôle 'Minecraft'.")
 
 
 @command("remove-minecraft")
 async def remove_minecraft(ctx):
-	await ctx.author.remove_roles(get(ctx.guild.roles,id=836949920488488970))
+	await ctx.author.remove_roles(get(ctx.guild.roles, id=836949920488488970))
 	await ctx.reply("Tu ne devrais plus avoir le rôle 'Minecraft'.")
 
 
 @command()
 async def portal(ctx):
-	await ctx.reply("Il est très bien le jeu, mais n'y a pas de rôle correspondant.")
+	await ctx.reply(
+		"Il est très bien le jeu, mais n'y a pas de rôle correspondant."
+	)
 
 
-bot_commands = [help,ping,next,sendsend,minecraft,remove_minecraft,portal]
+bot_commands = [
+	help, ping, next, sendsend, minecraft, remove_minecraft, portal
+]
