@@ -12,16 +12,16 @@ def get_link(e):
 
 def match(e_dets, l_dets):
 	for key in l_dets:
-		if key not in e_dets or e_dets[key]!=l_dets[key]:
+		if key not in e_dets or (e_dets[key] != l_dets[key]):
 			return False
 	return True
 
 
 def event_details(e):
 	return {
-		"module":   e["module"],
-		"category": e["category"],
-		"staff":    e["staff"][0] if e["staff"] else None,
-		"weekday":  int(e["day"]),
-		"starttime":e["starttime"],
+		"module":    e["module"],
+		"category":  e["category"],
+		"staff":     e["staff"][0] if e["staff"] else None,
+		"weekday":   int(e["day"]),
+		"starttime": e["starttime"],
 	}
