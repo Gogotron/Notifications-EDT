@@ -139,10 +139,11 @@ class BotEDT(Bot):
 			msg_txt += ' '.join(mentions) + "\n"
 
 		link = get_link(e)
-		if link is not None:
-			msg_txt += link + "\n"
+		if link:
+			msg_txt += f"{link}\n"
 
 	def corresponding_groups(self, group_nickname):
+		logging.info(f"Getting groups whose nickname is {group_nickname}.")
 		if group_nickname == "ISI":
 			return set(('CMI ISI201 GROUPE A1', ))
 		if group_nickname == "CMI":

@@ -8,6 +8,7 @@ def get_link(e):
 	for l_details, link in links:
 		if match(e_dets, l_details):
 			return link
+	return ""
 
 
 def match(e_dets, l_dets):
