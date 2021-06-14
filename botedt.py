@@ -142,6 +142,8 @@ class BotEDT(Bot):
 		if link:
 			msg_txt += f"{link}\n"
 
+		return msg_txt
+
 	def corresponding_groups(self, group_nickname):
 		logging.info(f"Getting groups whose nickname is {group_nickname}.")
 		if group_nickname == "ISI":
