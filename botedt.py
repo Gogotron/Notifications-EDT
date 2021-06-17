@@ -3,21 +3,29 @@ from discord.ext.tasks import loop
 from bot_commands import bot_commands
 from emploi_du_temps import fetch_combined
 from links import get_link
-from helper_functs import event_to_seconds, current_dateint
+from helper_functs import event_to_seconds, current_dateint, current_timeint
 from time import time, sleep
 import logging
 
 
 class BotEDT(Bot):
 	def __init__(self, prefix, channel, group_to_mention, urls, help_text):
-		logging.info("Initialize bot.")
+		self.logger = logging.getLogger(__name__)
+		self.logger.setLevel(logging.DEBUG)
+		handler = logging.FileHandler(f"log_{current_timeint()}.log", "w", "utf-8")
+		handler.setFormatter(logging.Formatter(
+			"[%(asctime)s] %(levelname)s: %(message)s"
+		))
+		self.logger.addHandler(handler)
+
+		self.logger.info("Initialize bot.")
 		super().__init__(command_prefix="$")
 
-		logging.info("Adding commands to bot.")
+		self.logger.info("Adding commands to bot.")
 		self.remove_command("help")
 		for command in bot_commands:
 			self.add_command(command)
-		logging.info("Finished adding commands to bot.")
+		self.logger.info("Finished adding commands to bot.")
 
 		self.channel = channel
 		self.group_to_mention = group_to_mention
@@ -30,7 +38,7 @@ class BotEDT(Bot):
 
 	async def on_ready(self):
 		print(f"We have logged in as {self.user}.")
-		logging.info(f"Bot is ready and logged in as {self.user}.")
+		self.logger.info(f"Bot is ready and logged in as {self.user}.")
 
 	def event_available(self):
 		return (
@@ -41,52 +49,52 @@ class BotEDT(Bot):
 	def attempt_to_update(self):
 		# A schedule is only valid for the day it was retrieved on.
 		# Anytime after, the schedule is considered 'expired'.
-		logging.info("Check if schedule expired.")
+		self.logger.info("Check if schedule expired.")
 		if self.last_update != current_dateint():
-			logging.info("Schedule expired, need a new one.")
+			self.logger.info("Schedule expired, need a new one.")
 			self.update_schedule()
 
 	def update_schedule(self):
-		logging.info("Updating schedule.")
+		self.logger.info("Updating schedule.")
 		self.schedule = fetch_combined(self.urls, PI_filter=False)
 		self.remove_past_events()
 		# Validity corresponds to the date the schedule was obtained
 		# because after a day the schedule is considered 'expired'.
-		logging.info("Set schedule validity.")
+		self.logger.info("Set schedule validity.")
 		self.last_update = current_dateint()
 
 	def remove_past_events(self):
-		logging.info("Trimming schedule.")
+		self.logger.info("Trimming schedule.")
 		while self.event_available(self):
 			del self.schedule[0]
 
 	@loop(seconds=120)
 	async def check_for_event(self):
-		logging.info("Schedule loop iteration.")
+		self.logger.info("Schedule loop iteration.")
 		self.attempt_to_update()
 
 		while self.event_available():
-			logging.info("Can send event.")
+			self.logger.info("Can send event.")
 			await self.send_event(self.schedule[0], notify=True)
 			del self.schedule[0]
 			sleep(3)
 
 		if len(self.schedule) == 0:
-			logging.info("No more events left.")
+			self.logger.info("No more events left.")
 			self.check_for_event.stop()
 
 	@check_for_event.before_loop
 	async def before_check_for_event(self):
 		print("Before loop")
-		logging.info("Schedule loop starts.")
+		self.logger.info("Schedule loop starts.")
 		self.update_schedule()
-		logging.info("Wait for bot to log in.")
+		self.logger.info("Wait for bot to log in.")
 		await self.wait_until_ready()
 
 	@check_for_event.after_loop
 	async def after_check_for_event(self):
 		print("After loop")
-		logging.warning("Schedule loop is no longer running.")
+		self.logger.warning("Schedule loop is no longer running.")
 		await self.client.get_channel(801041584870916118).send(
 			"After loop: the program is no longer running.\n<@310836324766580738>"
 		)
@@ -104,22 +112,22 @@ class BotEDT(Bot):
 		return self.schedule[i - 1]
 
 	async def send_event(self, e, notify=False, reply_to=None):
-		logging.info("Sending event.")
-		logging.debug(f"Event:{str(e)}")
+		self.logger.info("Sending event.")
+		self.logger.debug(f"Event:{str(e)}")
 		msg_txt = self.event_message(e, notify)
-		logging.debug(f"Message:{msg_txt}")
+		self.logger.debug(f"Message:{msg_txt}")
 
 		if reply_to is not None:
-			logging.info("Sending event as a reply.")
+			self.logger.info("Sending event as a reply.")
 			await reply_to.reply(msg_txt)
 		else:
-			logging.info("Sending event as a message.")
+			self.logger.info("Sending event as a message.")
 			message_to_publish = await self.get_channel(self.channel).send(msg_txt)
-			logging.info("Publishing message.")
+			self.logger.info("Publishing message.")
 			await message_to_publish.publish()
 
 	def event_message(self, e, notify):
-		logging.info("Writing event message.")
+		self.logger.info("Writing event message.")
 		weekdays = ("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")
 
 		if e["category"] in ('Examens Licences', 'Examens'):
@@ -173,7 +181,7 @@ class BotEDT(Bot):
 		return msg_txt
 
 	def corresponding_groups(self, group_nickname):
-		logging.info(f"Getting groups whose nickname is {group_nickname}.")
+		self.logger.info(f"Getting groups whose nickname is {group_nickname}.")
 		if group_nickname == "ISI":
 			return set(('CMI ISI201 GROUPE A1', ))
 		if group_nickname == "CMI":
@@ -189,7 +197,7 @@ class BotEDT(Bot):
 			valid_groups |= self.corresponding_groups(group_nickname[:-1])
 
 		if len(valid_groups) == 0:
-			logging.warning(f"Found no groups whose nickname is {group_nickname}.")
+			self.logger.warning(f"Found no groups whose nickname is {group_nickname}.")
 			return set(self.group_to_mention.keys())
 		else:
 			return valid_groups
