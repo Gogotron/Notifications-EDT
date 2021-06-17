@@ -12,7 +12,9 @@ class BotEDT(Bot):
 	def __init__(self, prefix, channel, group_to_mention, urls, help_text):
 		self.logger = logging.getLogger(__name__)
 		self.logger.setLevel(logging.DEBUG)
-		handler = logging.FileHandler(f"log_{current_timeint()}.log", "w", "utf-8")
+		handler = logging.FileHandler(
+			f"logs/log_{current_timeint()}.log", "w", "utf-8"
+		)
 		handler.setFormatter(logging.Formatter(
 			"[%(asctime)s] %(levelname)s: %(message)s"
 		))
