@@ -23,6 +23,12 @@ async def next(ctx, group_nickname="", n="1"):
 		f"{ctx.author.name} issued `next` command,"
 		f" with arguments `{group_nickname}` `{n}`."
 	)
+	if len(ctx.bot.schedule) == 0:
+		ctx.bot.warning(
+			"Schedule was empty, `next` command didn't return anything."
+		)
+		ctx.reply("L'emploi du temps est vide.")
+		return
 	n = int(n) - 1
 	if group_nickname == "":
 		if n >= len(ctx.bot.schedule):
