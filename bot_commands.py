@@ -27,7 +27,7 @@ async def next(ctx, group_nickname="", n="1"):
 		ctx.bot.logger.warning(
 			"Schedule was empty, `next` command didn't return anything."
 		)
-		ctx.reply("L'emploi du temps est vide.")
+		await ctx.reply("L'emploi du temps est vide.")
 		return
 	n = int(n) - 1
 	if group_nickname == "":
