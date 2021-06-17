@@ -24,7 +24,7 @@ async def next(ctx, group_nickname="", n="1"):
 		f" with arguments `{group_nickname}` `{n}`."
 	)
 	if len(ctx.bot.schedule) == 0:
-		ctx.bot.warning(
+		ctx.bot.logger.warning(
 			"Schedule was empty, `next` command didn't return anything."
 		)
 		ctx.reply("L'emploi du temps est vide.")
