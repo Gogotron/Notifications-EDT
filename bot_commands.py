@@ -1,17 +1,16 @@
 from discord.ext.commands import command
 from discord.utils import get
-import logging
 
 
 @command()
 async def help(ctx):
-	self.logger.info(f"{ctx.author.name} issued `help` command.")
+	ctx.bot.logger.info(f"{ctx.author.name} issued `help` command.")
 	await ctx.reply(ctx.bot.help_text)
 
 
 @command()
 async def ping(ctx):
-	self.logger.info(
+	ctx.bot.logger.info(
 		f"{ctx.author.name} issued `ping` command:"
 		f" {round(ctx.bot.latency*1000)}ms"
 	)
@@ -20,7 +19,7 @@ async def ping(ctx):
 
 @command()
 async def next(ctx, group_nickname="", n="1"):
-	self.logger.info(
+	ctx.bot.logger.info(
 		f"{ctx.author.name} issued `next` command,"
 		f" with arguments `{group_nickname}` `{n}`."
 	)
@@ -38,39 +37,39 @@ async def next(ctx, group_nickname="", n="1"):
 @command()
 async def sendsend(ctx):
 	if ctx.author.id == 310836324766580738:
-		self.logger.info(f"{ctx.author.name} issued `sendsend` command.")
+		ctx.bot.logger.info(f"{ctx.author.name} issued `sendsend` command.")
 		await ctx.bot.get_channel(ctx.bot.channel).send(ctx.message.content[10:])
 	else:
-		self.logger.warning(f"{ctx.author.name} tried issuing the `sendsend` command.")
+		ctx.bot.logger.warning(f"{ctx.author.name} tried issuing the `sendsend` command.")
 
 
 @command()
 async def minecraft(ctx):
-	self.logger.info(f"{ctx.author.name} issued `minecraft` command.")
+	ctx.bot.logger.info(f"{ctx.author.name} issued `minecraft` command.")
 	mc_role = get(ctx.guild.roles, id=836949920488488970)
 	if mc_role not in ctx.author.roles:
 		await ctx.author.add_roles(mc_role)
 		await ctx.reply("Tu devrais maintenant avoir le rôle 'Minecraft'.")
 	else:
-		self.logger.warning(f"{ctx.author.name} already had the 'Minecraft' role.")
+		ctx.bot.logger.warning(f"{ctx.author.name} already had the 'Minecraft' role.")
 		await ctx.reply("Tu avais déjà le rôle 'Minecraft'.")
 
 
 @command("remove-minecraft")
 async def remove_minecraft(ctx):
-	self.logger.info(f"{ctx.author.name} issued `remove-minecraft` command.")
+	ctx.bot.logger.info(f"{ctx.author.name} issued `remove-minecraft` command.")
 	mc_role = get(ctx.guild.roles, id=836949920488488970)
 	if mc_role in ctx.author.roles:
 		await ctx.author.remove_roles(mc_role)
 		await ctx.reply("Tu ne devrais plus avoir le rôle 'Minecraft'.")
 	else:
-		self.logger.warning(f"{ctx.author.name} didn't have the 'Minecraft' role.")
+		ctx.bot.logger.warning(f"{ctx.author.name} didn't have the 'Minecraft' role.")
 		await ctx.reply("Tu n'avais pas le rôle 'Minecraft'.")
 
 
 @command()
 async def portal(ctx):
-	self.logger.info(f"{ctx.author.name} issued `portal` command.")
+	ctx.bot.logger.info(f"{ctx.author.name} issued `portal` command.")
 	await ctx.reply(
 		"Il est très bien le jeu, mais n'y a pas de rôle correspondant."
 	)
