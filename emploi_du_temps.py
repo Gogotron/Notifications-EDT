@@ -8,15 +8,15 @@ from helper_functs import (
 )
 
 
-def get_schedule(URL):
-	page = requests.get(URL)
+def get_schedule(url: str) -> list:
+	page = requests.get(url)
 	soup = bs(page.content, 'html.parser')
 	events = soup.find_all('event')
 
 	return parse_events(events)
 
 
-def parse_events(events):
+def parse_events(events: list) -> list:
 	event_dictionnaries = []
 	for event in events:
 		edict = {}
@@ -72,10 +72,10 @@ def parse_events(events):
 	return sorted_schedule(event_dictionnaries)
 
 
-def fetch_combined(urls, PI_filter=False):
+def fetch_combined(urls: list, PI_filter: bool = False) -> list:
 	combined_schedule = []
 	for s in map(get_schedule, urls):
-		for e in remove_non_PI(s) if PI_filter else s:
+		for e in (remove_non_PI(s) if PI_filter else s):
 			if e not in combined_schedule:
 				combined_schedule.append(e)
 	return sorted_schedule(combined_schedule)

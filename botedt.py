@@ -9,7 +9,14 @@ import logging
 
 
 class BotEDT(Bot):
-	def __init__(self, prefix, channel, group_to_mention, urls, help_text):
+	def __init__(
+		self,
+		prefix: str,
+		channel: int,
+		group_to_mention: dict,
+		urls: list,
+		help_text: str
+	):
 		self.logger = logging.getLogger(__name__)
 		self.logger.setLevel(logging.DEBUG)
 		handler = logging.FileHandler(
@@ -42,7 +49,7 @@ class BotEDT(Bot):
 		print(f"We have logged in as {self.user}.")
 		self.logger.info(f"Bot is ready and logged in as {self.user}.")
 
-	def event_available(self):
+	def event_available(self) -> bool:
 		return (
 			len(self.schedule) != 0
 			and event_to_seconds(self.schedule[0]) - time() < 15 * 60
@@ -101,7 +108,7 @@ class BotEDT(Bot):
 			"After loop: the program is no longer running.\n<@310836324766580738>"
 		)
 
-	def next_class(self, n, group_nickname):
+	def next_class(self, n: int, group_nickname: str):
 		valid_groups = self.corresponding_groups(group_nickname)
 		i = 0
 		while n >= 0 and i < len(self.schedule):
@@ -113,7 +120,12 @@ class BotEDT(Bot):
 			i += 1
 		return self.schedule[i - 1]
 
-	async def send_event(self, e, notify=False, reply_to=None):
+	async def send_event(
+		self,
+		e: dict,
+		notify: bool = False,
+		reply_to: "context" = None
+	):
 		self.logger.info("Sending event.")
 		self.logger.debug(f"Event:{str(e)}")
 		msg_txt = self.event_message(e, notify)
@@ -128,7 +140,7 @@ class BotEDT(Bot):
 			self.logger.info("Publishing message.")
 			await message_to_publish.publish()
 
-	def event_message(self, e, notify):
+	def event_message(self, e: dict, notify: bool) -> str:
 		self.logger.info("Writing event message.")
 		weekdays = ("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")
 
@@ -182,7 +194,7 @@ class BotEDT(Bot):
 
 		return msg_txt
 
-	def corresponding_groups(self, group_nickname):
+	def corresponding_groups(self, group_nickname: str) -> set:
 		self.logger.info(f"Getting groups whose nickname is {group_nickname}.")
 		if group_nickname == "ISI":
 			return set(('CMI ISI201 GROUPE A1', ))
