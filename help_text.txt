@@ -1,6 +1,17 @@
-La seule commande existante est:
-  `$next [groupe] [n]`
-Elle affiche le n-prochain cours du groupe choisit, avec les infos correspondantes.
-Pour afficher le prochain cours du groupe A32 il suffit de faire `$next A32 1`, pour afficher celui qui suit `$next A32 2`, etc. Par defaut n est 1, donc `$next B42 1` peut s'ecrire `$next B42`. Le groupe peut etre indiqué comme ça `A21`, comme ça `B5`, ou même comme ça `A`, pour se referer au demi-groupe A21, au groupe B5, ou à la série A respectivement. Le groupe peut aussi être `ISI` ou `OPTIM`.
+Les commandes existantes sont:
+  `$help`
+Affiche ce texte.
 
-En plus, 15 minutes avant chaque cours, Notifications EDT envoi un message envoi un message avec les infos du cours, comme `$next`, mais en plus il mentionne les personnes concernées.
+  `$ping`
+  Affiche le temps de réponse du bot, et permet de vérifier qu'il est en ligne.
+
+  `$next [groupe] [n]`
+Affiche le n-prochain cours du groupe choisi, avec ces infos correspondantes.
+Pour afficher le prochain cours du groupe A32 il suffit de faire `$next A32 1`, pour afficher celui qui suit `$next A32 2`, etc. Par defaut n est 1, donc `$next B42 1` peut s'ecrire `$next B42`. Le groupe peut etre indiqué comme ça `A21`, comme ça `B5`, ou même comme ça `A`, pour se referer au demi-groupe A21, au groupe B5, ou à la série A respectivement. Le groupe peut aussi être `ISI` ou `OPTIM`.
+En plus, 15 minutes avant chaque cours, Notifications EDT envoi un message avec les infos du cours, comme `$next`, et il mentionne les personnes concernées.
+
+  `$minecraft`
+Attribue le rôle pour acceder aux channels de minecraft.
+
+  `$remove-minecraft`
+Enleve le rôle pour acceder aux channels de minecraft.
