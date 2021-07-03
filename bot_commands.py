@@ -46,7 +46,9 @@ async def sendsend(ctx):
 		ctx.bot.logger.info(f"{ctx.author.name} issued `sendsend` command.")
 		await ctx.bot.get_channel(ctx.bot.channel).send(ctx.message.content[10:])
 	else:
-		ctx.bot.logger.warning(f"{ctx.author.name} tried issuing the `sendsend` command.")
+		ctx.bot.logger.warning(
+			f"{ctx.author.name} tried issuing the `sendsend` command."
+		)
 
 
 @command()
@@ -57,7 +59,9 @@ async def minecraft(ctx):
 		await ctx.author.add_roles(mc_role)
 		await ctx.reply("Tu devrais maintenant avoir le rôle 'Minecraft'.")
 	else:
-		ctx.bot.logger.warning(f"{ctx.author.name} already had the 'Minecraft' role.")
+		ctx.bot.logger.warning(
+			f"{ctx.author.name} already had the 'Minecraft' role."
+		)
 		await ctx.reply("Tu avais déjà le rôle 'Minecraft'.")
 
 
@@ -69,7 +73,9 @@ async def remove_minecraft(ctx):
 		await ctx.author.remove_roles(mc_role)
 		await ctx.reply("Tu ne devrais plus avoir le rôle 'Minecraft'.")
 	else:
-		ctx.bot.logger.warning(f"{ctx.author.name} didn't have the 'Minecraft' role.")
+		ctx.bot.logger.warning(
+			f"{ctx.author.name} didn't have the 'Minecraft' role."
+		)
 		await ctx.reply("Tu n'avais pas le rôle 'Minecraft'.")
 
 
