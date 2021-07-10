@@ -23,7 +23,7 @@ def parse_events(events: list) -> list:
 	return sorted_schedule(event_dictionnaries)
 
 
-def parse_event(event) -> dict:
+def parse_event(event: "Tag") -> dict:
 	edict = {}
 
 	# Mandatory attribute
