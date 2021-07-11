@@ -69,6 +69,8 @@ def parse_event(event: "Tag") -> dict:
 	edict["start"]     = tuple(map(int, edict["starttime"].split(':')))
 	edict["end"]       = tuple(map(int, edict["endtime"].split(':')))
 	edict["real_date"] = real_date(edict["date"], edict["day"])
+	edict["start_int"] = event_timeint(edict, "start")
+	edict["end_int"]   = event_timeint(edict, "end")
 	edict["timeint"]   = event_timeint(edict)
 
 	return edict
