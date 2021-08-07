@@ -24,54 +24,45 @@ def parse_events(events: list) -> list:
 
 
 def parse_event(event: "Tag") -> dict:
-	edict = {}
-
-	# Mandatory attribute
-	edict["date"] = event["date"]
 	# Mandatory tag
-	edict["day"]        = event.day        .get_text()
-	edict["starttime"]  = event.starttime  .get_text()
-	edict["endtime"]    = event.endtime    .get_text()
-	edict["category"]   = event.category   .get_text()
-	edict["prettyweek"] = event.prettyweeks.get_text()
+	edict = {
+		"day":       event.day        .get_text(),
+		"starttime": event.starttime  .get_text(),
+		"endtime":   event.endtime    .get_text(),
+		"category":  event.category   .get_text(),
+		"week":      int(event.prettyweeks.get_text()),
+		"module":    None,
+		"room":      None,
+		"notes":     None,
+		"groups":    None,
+		"staff":     None,
+	}
+	edict["start"]     = tuple(map(int, edict["starttime"].split(':')))
+	edict["end"]       = tuple(map(int, edict["endtime"].split(':')))
+	edict["real_date"] = real_date(event["date"], edict["day"])
+	edict["start_int"] = event_timeint(edict, "start")
+	edict["end_int"]   = event_timeint(edict, "end")
+	edict["timeint"]   = event_timeint(edict)
 	# Optional values
 	if event.resources.module:
 		edict["module"] = event.resources.module.item.get_text()
-	else:
-		edict["module"] = None
 	if event.resources.room:
 		edict["room"] = event.resources.room.item.get_text()
-	else:
-		edict["room"] = None
 	if event.notes:
 		for br in event.notes.find_all('br'):
 			br.replace_with("###")
 		edict["notes"] = event.notes.get_text().replace("###", " ").strip()
-	else:
-		edict["notes"] = None
 	# Optional list values
 	if event.resources.group:
 		edict["groups"] = [
 			i.get_text()
 			for i in event.resources.group.find_all('item')
 		]
-	else:
-		edict["groups"] = None
 	if event.resources.staff:
 		edict["staff"] = [
 			i.get_text()
 			for i in event.resources.staff.find_all('item')
 		]
-	else:
-		edict["staff"] = None
-
-	edict["week"]      = int(edict["prettyweek"])
-	edict["start"]     = tuple(map(int, edict["starttime"].split(':')))
-	edict["end"]       = tuple(map(int, edict["endtime"].split(':')))
-	edict["real_date"] = real_date(edict["date"], edict["day"])
-	edict["start_int"] = event_timeint(edict, "start")
-	edict["end_int"]   = event_timeint(edict, "end")
-	edict["timeint"]   = event_timeint(edict)
 
 	return edict
 
