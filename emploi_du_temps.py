@@ -69,7 +69,7 @@ def parse_event(event: dict) -> dict:
         'staff':     None,
         'notes':     None,
     }
-    parsed_event['day'] = datetime(*parsed_event['date']).weekday(),
+    parsed_event['day'] = datetime(*parsed_event['date']).weekday()
     for field in format_description(event):
         if field in (parsed_event['module'], parsed_event['category']):
             continue
