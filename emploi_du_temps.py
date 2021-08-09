@@ -56,7 +56,7 @@ def parse_event(event: dict) -> dict:
     parsed_event = {
         'id':        event['id'],
         'day':       0,
-        'real_date': tuple(map(int, event['start'].split('T')[0].split('-'))),
+        'date':      tuple(map(int, event['start'].split('T')[0].split('-'))),
         'starttime': event['start'].split('T')[1],
         'endtime':   event['end']  .split('T')[1],
         'startint':  event_timeint(event, 'start'),
@@ -69,7 +69,7 @@ def parse_event(event: dict) -> dict:
         'staff':     None,
         'notes':     None,
     }
-    parsed_event['day'] = datetime(*parsed_event['real_date']).weekday(),
+    parsed_event['day'] = datetime(*parsed_event['date']).weekday(),
     for field in format_description(event):
         if field in (parsed_event['module'], parsed_event['category']):
             continue

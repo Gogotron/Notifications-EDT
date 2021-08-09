@@ -148,7 +148,7 @@ class BotEDT(Bot):
 			notify = False
 		msg_txt = ""
 
-		year, month, day = e['real_date']
+		year, month, day = e['date']
 		weekday = weekdays[int(e['day'])]
 		module, category = e["module"], e["category"]
 		msg_txt += (

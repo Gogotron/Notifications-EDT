@@ -26,33 +26,9 @@ def current_dateint() -> int:
 	return current_timeint() // 10000
 
 
-def leap(y: int) -> bool:
-	return (y%4 == 0) and (not (y%100 == 0) or (y%400 == 0))
-
-
-def real_date(a: str, b: str) -> tuple:
-	day, month, year = map(int, a.split('/'))
-	month_lengths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-	if leap(year):
-		month_lengths[1] = 29
-	# Take into account the offset corresponding to the day of the week.
-	offset = int(b)
-	day += offset
-	# Fix overflow from one month to the next, or one year to the next.
-	month += day // month_lengths[month - 1]
-	day %= month_lengths[month - 1]
-	year += month // 12
-	month %= 12
-	return (year, month, day)
-
-
-def text_to_time(a: str) -> tuple:
-	return tuple(map(int, a.split(':')))
-
-
 def print_event(e: dict):
 	print(
-		"/".join(map(str, e["real_date"][::-1])),
+		"/".join(map(str, e["date"][::-1])),
 		f"{e['starttime']}-{e['endtime']}"
 	)
 	if e["module"]:
