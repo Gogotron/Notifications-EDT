@@ -37,7 +37,7 @@ async def next(ctx, group_nickname="", n="1"):
 			e = ctx.bot.schedule[n]
 	else:
 		e = ctx.bot.next_class(n, group_nickname)
-	await ctx.bot.post_event(e, False, ctx)
+	await ctx.bot.send_event(e, False, ctx)
 
 
 @command()
