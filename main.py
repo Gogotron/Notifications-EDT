@@ -1,7 +1,8 @@
 from botedt import BotEDT
 from keep_alive import keep_alive
 from os import getenv
-from variables import prefix, channel, group_to_mention, MI_groups, help_text
+from variables import prefix, channel, group_to_mention, MI_URLS, help_text
+import logging
 
 
 def main():
@@ -9,7 +10,7 @@ def main():
 
 	bot = BotEDT(prefix, channel, group_to_mention, MI_groups, help_text)
 	bot.run(getenv("TOKEN"))
-	bot.logger.shutdown()
+	logging.shutdown()
 
 
 if __name__ == "__main__":
