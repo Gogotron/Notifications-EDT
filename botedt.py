@@ -195,24 +195,14 @@ class BotEDT(Bot):
 
 		return msg_txt
 
-	def corresponding_groups(self, group_nickname: str) -> set:
+	def corresponding_groups(self, group_nickname: str) -> tuple:
 		self.logger.info(f"Getting groups whose nickname is {group_nickname}.")
-		if group_nickname == "ISI":
-			return set(('CMI ISI201 GROUPE A1', ))
-		if group_nickname == "CMI":
-			return set(('CMI OPTIM 201', ))
-
-		valid_groups = set(
-			filter(
-				lambda x: group_nickname in x.split(),
-				list(self.group_to_mention.keys())[:-3]
-			)
-		)
-		if len(group_nickname) > 1:
-			valid_groups |= self.corresponding_groups(group_nickname[:-1])
-
+		valid_groups = tuple(filter(
+			lambda x: x.startswith(group_nickname),
+			list(self.group_to_mention.keys())
+		))
 		if len(valid_groups) == 0:
 			self.logger.warning(f"Found no groups whose nickname is {group_nickname}.")
-			return set(self.group_to_mention.keys())
+			return tuple(self.group_to_mention.keys())
 		else:
 			return valid_groups

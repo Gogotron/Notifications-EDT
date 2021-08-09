@@ -8,64 +8,29 @@ class WebApiURL:
 	SIDEBAR         = 'GetSideBarEvent'
 
 
-MI_groups = [
+MI_groups = (
 	'MA301A1', 'MA301A2', 'MA301A3',
 	'MI301A1', 'MI301A2',
 	'IN301A1', 'IN301A2', 'IN301A3', 'IN301A4', 'IN301A5',
-]
+)
 
 channel = 802640238664351826
 role_ids = (
-	802575166831067166,  # A1
-	802575212280807494,  # A2
-	802575231691915344,  # A3
-	802575247391064075,  # A4
-	802575284070514688,  # A5
-	802573383924449280,  # A6
-	802573021222928414,  # B1
-	802573125212045332,  # B2
-	802573213602283521,  # B3
-	802573271320887306,  # B4
-	802573341495132222,  # B5
-	802578798444675113,  # ISI
-	802579017102000158,  # OPTIM
+	870986677823352882,  # MA1
+	870987651115782154,  # MA2
+	870987651115782154,  # MA3
+	870988159746453507,  # MI1
+	870988320254091296,  # MI2
+	870988563825713152,  # IN1
+	870988781661073418,  # IN2
+	870988893653184562,  # IN3
+	870988990558392340,  # IN4
+	870989217994514482,  # IN5
 )
 role_mentions = tuple(map(lambda role_id: f"<@&{role_id}>", role_ids))
 
 group_to_mention = {
-	'MINF201 SERIE A (Maths/Info)': role_mentions[0:6],
-	'MINF201 SERIE B (Maths/Info)': role_mentions[6:11],
-	'MINF201 GROUPE A1 (Maths/Info)': role_mentions[0:1],
-	'MINF201 GROUPE A2 (Maths/Info)': role_mentions[1:2],
-	'MINF201 GROUPE A3 (Maths/Info)': role_mentions[2:3],
-	'MINF201 GROUPE A4 (Maths/Info)': role_mentions[3:4],
-	'MINF201 GROUPE A5 (Maths/Info)': role_mentions[4:5],
-	'MINF201 GROUPE A6 (Maths/Info)': role_mentions[5:6],
-	'MINF201 GROUPE B1 (Maths/Info)': role_mentions[6:7],
-	'MINF201 GROUPE B2 (Maths/Info)': role_mentions[7:8],
-	'MINF201 GROUPE B4 (Maths/Info)': role_mentions[9:10],
-	'MINF201 GROUPE B5 (Maths/Info)': role_mentions[10:11],
-	'MINF201 GROUPE A11 (Maths/Info)': role_mentions[0:1],
-	'MINF201 GROUPE A12 (Maths/Info)': role_mentions[0:1],
-	'MINF201 GROUPE A21 (Maths/Info)': role_mentions[1:2],
-	'MINF201 GROUPE A22 (Maths/Info)': role_mentions[1:2],
-	'MINF201 GROUPE A31 (Maths/Info)': role_mentions[2:3],
-	'MINF201 GROUPE A32 (Maths/Info)': role_mentions[2:3],
-	'MINF201 GROUPE A41 (Maths/Info)': role_mentions[3:4],
-	'MINF201 GROUPE A42 (Maths/Info)': role_mentions[3:4],
-	'MINF201 GROUPE A51 (Maths/Info)': role_mentions[4:5],
-	'MINF201 GROUPE A52 (Maths/Info)': role_mentions[4:5],
-	'MINF201 GROUPE A61 (Maths/Info)': role_mentions[5:6],
-	'MINF201 GROUPE B11 (Maths/Info)': role_mentions[6:7],
-	'MINF201 GROUPE B12 (Maths/Info)': role_mentions[6:7],
-	'MINF201 GROUPE B21 (Maths/Info)': role_mentions[7:8],
-	'MINF201 GROUPE B22 (Maths/Info)': role_mentions[7:8],
-	'MINF201 GROUPE B41 (Maths/Info)': role_mentions[9:10],
-	'MINF201 GROUPE B42 (Maths/Info)': role_mentions[9:10],
-	'MINF201 GROUPE B51 (Maths/Info)': role_mentions[10:11],
-	'MINF201 GROUPE B52 (Maths/Info)': role_mentions[10:11],
-	'CMI ISI201 GROUPE A1': role_mentions[11:12],
-	'CMI OPTIM 201': role_mentions[12:13],
+	group: mention for group, mention in zip(MI_groups, role_mentions)
 }
 
 with open("help_text.txt", "r") as f:
