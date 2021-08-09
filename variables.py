@@ -8,7 +8,7 @@ class WebApiURL:
 	SIDEBAR         = 'GetSideBarEvent'
 
 
-groups = [
+MI_groups = [
 	'MA301A1', 'MA301A2', 'MA301A3',
 	'MI301A1', 'MI301A2',
 	'IN301A1', 'IN301A2', 'IN301A3', 'IN301A4', 'IN301A5',

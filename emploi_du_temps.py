@@ -98,5 +98,5 @@ def get_combined_schedule(groups: list) -> list:
 
 
 if __name__ == '__main__':
-    from variables import groups
+    from variables import MI_groups
     sche = get_combined_schedule(groups)

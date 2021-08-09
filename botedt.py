@@ -1,7 +1,7 @@
 from discord.ext.commands import Bot
 from discord.ext.tasks import loop
 from bot_commands import bot_commands
-from emploi_du_temps import fetch_combined
+from emploi_du_temps import get_combined_schedule
 from links import get_link
 from helper_functs import event_to_seconds, current_dateint, current_timeint
 from time import time, sleep
@@ -14,7 +14,7 @@ class BotEDT(Bot):
 		prefix: str,
 		channel: int,
 		group_to_mention: dict,
-		urls: list,
+		groups: list,
 		help_text: str
 	):
 		self.logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ class BotEDT(Bot):
 
 		self.channel = channel
 		self.group_to_mention = group_to_mention
-		self.urls = urls
+		self.groups = groups
 		self.help_text = help_text
 		self.schedule = []
 		self.last_update = None
@@ -65,7 +65,7 @@ class BotEDT(Bot):
 
 	def update_schedule(self):
 		self.logger.info("Updating schedule.")
-		self.schedule = fetch_combined(self.urls, PI_filter=False)
+		self.schedule = get_combined_schedule(self.groups)
 		self.remove_past_events()
 		# Validity corresponds to the date the schedule was obtained
 		# because after a day the schedule is considered 'expired'.
