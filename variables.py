@@ -1,33 +1,17 @@
 prefix = "$"
 
-BASE_URL = "https://apogee.u-bordeaux.fr/edt-st/Licence1/Semestre2/"
-URL_MINF_A3   = BASE_URL + "g254484.xml"
-URL_MINF_A5   = BASE_URL + "g254486.xml"
-URL_MINF_B5   = BASE_URL + "g301648.xml"
-URL_PYC_A3    = BASE_URL + "g303429.xml"
-URL_CH_A2     = BASE_URL + "g254353.xml"
-URL_SI_A1     = BASE_URL + "g302805.xml"
-URL_SV_A1     = BASE_URL + "g299833.xml"
 
-URL_MINF_A    = BASE_URL + "g254481.xml"
-URL_MINF_B    = BASE_URL + "g301643.xml"
-URL_CMI_ISI   = BASE_URL + "g301653.xml"
-URL_CMI_OPTIM = BASE_URL + "g347963.xml"
+class WebApiURL:
+	DOMAIN          = 'https://ukit.kbdev.io/Home/'
+	GROUPS          = 'ReadResourceListItems'
+	CALENDARDATA    = 'GetCalendarData'
+	SIDEBAR         = 'GetSideBarEvent'
 
-PI_URLS = [
-	URL_MINF_A3,
-	URL_MINF_A5,
-	URL_MINF_B5,
-	URL_PYC_A3,
-	URL_CH_A2,
-	URL_SI_A1,
-	URL_SV_A1
-]
-MI_URLS = [
-	URL_MINF_A,
-	URL_MINF_B,
-	URL_CMI_ISI,
-	URL_CMI_OPTIM
+
+groups = [
+	'MA301A1', 'MA301A2', 'MA301A3',
+	'MI301A1', 'MI301A2',
+	'IN301A1', 'IN301A2', 'IN301A3', 'IN301A4', 'IN301A5',
 ]
 
 channel = 802640238664351826

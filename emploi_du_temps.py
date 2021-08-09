@@ -1,85 +1,102 @@
 import requests
-from bs4 import BeautifulSoup as bs
-from helper_functs import (
-	real_date,
-	event_timeint,
-	sorted_schedule,
-	remove_non_PI
-)
+from html.parser import unescape
+from helper_functs import sorted_schedule, event_timeint
+from datetime import datetime
+from variables import WebApiURL
 
 
-def get_schedule(url: str) -> list:
-	page = requests.get(url)
-	soup = bs(page.content, 'html.parser')
-	events = soup.find_all('event')
-
-	return parse_events(events)
-
-
-def parse_events(events: list) -> list:
-	event_dictionnaries = []
-	for event in events:
-		event_dictionnaries.append(parse_event(event))
-	return sorted_schedule(event_dictionnaries)
+def get_groups() -> map:
+    url = WebApiURL.DOMAIN + WebApiURL.GROUPS
+    params = {'searchTerm': '_', 'pageSize': '10000', 'resType': '103'}
+    r = requests.get(url, params=params)
+    j = r.json()
+    return map(lambda e: e['id'], j['results'])
 
 
-def parse_event(event: "Tag") -> dict:
-	# Mandatory tag
-	edict = {
-		"day":       event.day        .get_text(),
-		"starttime": event.starttime  .get_text(),
-		"endtime":   event.endtime    .get_text(),
-		"category":  event.category   .get_text(),
-		"week":      int(event.prettyweeks.get_text()),
-		"module":    None,
-		"room":      None,
-		"notes":     None,
-		"groups":    None,
-		"staff":     None,
-	}
-	edict["start"]     = tuple(map(int, edict["starttime"].split(':')))
-	edict["end"]       = tuple(map(int, edict["endtime"].split(':')))
-	edict["real_date"] = real_date(event["date"], edict["day"])
-	edict["start_int"] = event_timeint(edict, "start")
-	edict["end_int"]   = event_timeint(edict, "end")
-	edict["timeint"]   = event_timeint(edict)
-	# Optional values
-	if event.resources.module:
-		edict["module"] = event.resources.module.item.get_text()
-	if event.resources.room:
-		edict["room"] = event.resources.room.item.get_text()
-	if event.notes:
-		for br in event.notes.find_all('br'):
-			br.replace_with("###")
-		edict["notes"] = event.notes.get_text().replace("###", " ").strip()
-	# Optional list values
-	if event.resources.group:
-		edict["groups"] = [
-			i.get_text()
-			for i in event.resources.group.find_all('item')
-		]
-	if event.resources.staff:
-		edict["staff"] = [
-			i.get_text()
-			for i in event.resources.staff.find_all('item')
-		]
-
-	return edict
+def format_description(event: dict) -> filter:
+    return filter(None, map(
+        unescape,
+        event['description']
+        .replace('\r', '')
+        .replace('<br />', '')
+        .split('\n')
+    ))
 
 
-def fetch_combined(urls: list, PI_filter: bool = False) -> list:
-	combined_schedule = []
-	for s in map(get_schedule, urls):
-		for e in (remove_non_PI(s) if PI_filter else s):
-			if e not in combined_schedule:
-				combined_schedule.append(e)
-	return sorted_schedule(combined_schedule)
+def is_staff(field: str) -> bool:
+    return all(map(lambda x: x.isupper() or x.istitle(), field.split()))
 
 
-if __name__ == "__main__":
-	from time import time
-	from variables import PI_URLS
+def is_room(field: str) -> bool:
+    return '/' in field
 
-	start = time()
-	sche = fetch_combined(PI_URLS, PI_filter=True)
-	print("Time:", time() - start)
+
+def get_calendar(group: str):
+    data = {
+        'start': '2021-09-03',
+        'end': '2021-12-17',
+        'resType': '103',
+        'calView': 'agendaDay',
+        'federationIds[]': group,
+    }
+    url = WebApiURL.DOMAIN + WebApiURL.CALENDARDATA
+    headers = {
+        'Connection': 'keep-alive',
+        'Pragma': 'no-cache',
+        'Cache-Control': 'no-cache',
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    }
+    r = requests.post(url, data=data, headers=headers)
+    j = r.json()
+    return {event['id']: event for event in j}
+
+
+def parse_event(event: dict) -> dict:
+    parsed_event = {
+        'id':        event['id'],
+        'day':       0,
+        'real_date': tuple(map(int, event['start'].split('T')[0].split('-'))),
+        'starttime': event['start'].split('T')[1],
+        'endtime':   event['end']  .split('T')[1],
+        'startint':  event_timeint(event, 'start'),
+        'endint':    event_timeint(event, 'end'),
+        'timeint':   event_timeint(event),
+        'module':    event['modules'] and event['modules'][0],
+        'category':  event['eventCategory'],
+        'groups':    [],
+        'room':      None,
+        'staff':     None,
+        'notes':     None,
+    }
+    parsed_event['day'] = datetime(*parsed_event['real_date']).weekday(),
+    for field in format_description(event):
+        if field in (parsed_event['module'], parsed_event['category']):
+            continue
+        elif is_room(field):
+            parsed_event['room'] = field
+        elif is_staff(field):
+            parsed_event['staff'] = [field]
+        else:
+            if parsed_event['notes']:
+                parsed_event['notes'] += field
+            else:
+                parsed_event['notes'] = field
+    return parsed_event
+
+
+def get_combined_schedule(groups: list) -> list:
+    sche_id_dict = {}
+    for group in groups:
+        id_cal = get_calendar(group)
+        for id, event in id_cal.items():
+            if event['eventCategory'] != 'Vacances':
+                if id not in sche_id_dict:
+                    sche_id_dict[id] = parse_event(event)
+                sche_id_dict[id]['groups'].append(group)
+    return sorted_schedule(sche_id_dict.values())
+
+
+if __name__ == '__main__':
+    from variables import groups
+    sche = get_combined_schedule(groups)

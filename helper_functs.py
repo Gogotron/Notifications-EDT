@@ -8,9 +8,10 @@ def timeint(year: int, month: int, day: int, hour: int, minute: int) -> int:
 	return ((((year*100+month)*100 + day)*100+hour)*100 + minute)
 
 
-def event_timeint(e: dict, interval_bound: str = "start") -> int:
-	year, month, day = e["real_date"]
-	hour, minute = e[interval_bound]
+def event_timeint(e: dict, interval_bound: str = 'start') -> int:
+	date, time = e[interval_bound].split('T')
+	year, month,  day    = map(int, date.split('-'))
+	hour, minute, second = map(int, time.split(':'))
 	return timeint(year, month, day, hour, minute)
 
 
