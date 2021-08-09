@@ -158,12 +158,13 @@ class BotEDT(Bot):
 			f"{day}/{month}/{year}"
 			f"* **\n"
 		)
-		if module[0] == "4":
-			module = module.split(" ", maxsplit=1)[1]
-		if module and category:
-			msg_txt += f"**{module} ({category})**\n"
 		if module:
-			msg_txt += f"**{module}**\n"
+			if module[0] == "4":
+				module = module.split(" ", maxsplit=1)[1]
+			if category:
+				msg_txt += f"**{module} ({category})**\n"
+			else:
+				msg_txt += f"**{module}**\n"
 		elif category:
 			msg_txt += f"**{category}**\n"
 
