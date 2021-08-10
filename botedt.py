@@ -131,7 +131,7 @@ class BotEDT(Bot):
 		self.logger.info("Sending event.")
 		self.logger.debug(f"Event:{str(e)}")
 		msg_txt = self.event_message(e, notify)
-		self.logger.debug(f"Message:{msg_txt}")
+		self.logger.debug(f"Message:{msg_txt!r}")
 
 		if reply_to is not None:
 			self.logger.info("Sending event as a reply.")
