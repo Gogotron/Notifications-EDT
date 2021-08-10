@@ -197,8 +197,10 @@ class BotEDT(Bot):
 
 	def corresponding_groups(self, group_nickname: str) -> tuple:
 		self.logger.info(f"Getting groups whose nickname is {group_nickname}.")
+		if len(group_nickname) >= 2:
+			group_name = group_nickname[:2]+'301A'+group_nickname[2:]
 		valid_groups = tuple(filter(
-			lambda x: x.startswith(group_nickname),
+			lambda x: x.startswith(group_name),
 			list(self.group_to_mention.keys())
 		))
 		if len(valid_groups) == 0:
