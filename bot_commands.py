@@ -87,6 +87,37 @@ async def portal(ctx):
 	)
 
 
-bot_commands = [
-	help, ping, next, sendsend, minecraft, remove_minecraft, portal
-]
+@command()
+async def groupe(ctx, group_nickname):
+	ctx.bot.logger.info(
+		f"{ctx.author.name} issued `groupe` command,"
+		f" with argument `{group_nickname}`."
+	)
+	if group_nickname in ctx.bot.nickname_to_id:
+		role = get(ctx.guild.roles, id=ctx.bot.nickname_to_id[group_nickname])
+		if role in ctx.author.roles:
+			ctx.bot.logger.warning(
+				f"{ctx.author.name} already had the '{group_nickname}' role."
+			)
+			await ctx.reply(f"Tu avais déjà le rôle '{group_nickname}'.")
+		else:
+			for other_role in map(
+				lambda x: get(ctx.guild.roles, id=x),
+				ctx.bot.nickname_to_id[group_nickname]
+			):
+				if other_role in ctx.author.roles:
+					await ctx.author.remove_roles(other_role)
+			await ctx.author.add_roles(role)
+			await ctx.reply(
+				f"Tu devrais maintenant avoir le rôle '{group_nickname}'."
+			)
+	else:
+		ctx.bot.logger.warning(
+			f"'{group_nickname}' has no corresponding role."
+		)
+		await ctx.reply(f"Le rôle '{group_nickname}' n'est pas disponible.")
+
+
+bot_commands = (
+	help, ping, next, sendsend, minecraft, remove_minecraft, portal, groupe
+)

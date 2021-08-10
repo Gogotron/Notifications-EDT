@@ -15,3 +15,6 @@ Attribue le rôle pour acceder aux channels de minecraft.
 
   `$remove-minecraft`
 Enleve le rôle pour acceder aux channels de minecraft.
+
+  `$groupe [groupe]`
+Attribue le rôle [groupe]. Par exemple `$groupe IN4` attribue le rôle IN4 correspondant au groupe IN301A4.

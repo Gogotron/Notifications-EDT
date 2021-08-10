@@ -13,6 +13,7 @@ class BotEDT(Bot):
 		self,
 		prefix: str,
 		channel: int,
+		nickname_to_id: dict,
 		group_to_mention: dict,
 		groups: list,
 		help_text: str
@@ -37,6 +38,7 @@ class BotEDT(Bot):
 		self.logger.info("Finished adding commands to bot.")
 
 		self.channel = channel
+		self.nickname_to_id = nickname_to_id
 		self.group_to_mention = group_to_mention
 		self.groups = groups
 		self.help_text = help_text

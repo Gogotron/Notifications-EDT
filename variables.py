@@ -8,13 +8,15 @@ class WebApiURL:
 	SIDEBAR         = 'GetSideBarEvent'
 
 
+channel = 802640238664351826
+
 MI_groups = (
 	'MA301A1', 'MA301A2', 'MA301A3',
 	'MI301A1', 'MI301A2',
 	'IN301A1', 'IN301A2', 'IN301A3', 'IN301A4', 'IN301A5',
 )
+group_nicknames = tuple(group[:2]+group[6:] for group in MI_groups)
 
-channel = 802640238664351826
 role_ids = (
 	870986677823352882,  # MA1
 	870987651115782154,  # MA2
@@ -27,8 +29,11 @@ role_ids = (
 	870988990558392340,  # IN4
 	870989217994514482,  # IN5
 )
-role_mentions = tuple(map(lambda role_id: f"<@&{role_id}>", role_ids))
+role_mentions = tuple(f"<@&{role_id}>" for role_id in role_ids)
 
+nickname_to_id = {
+	nickname: id for nickname, id in zip(group_nicknames, role_ids)
+}
 group_to_mention = {
 	group: mention for group, mention in zip(MI_groups, role_mentions)
 }
