@@ -52,42 +52,6 @@ async def sendsend(ctx):
 
 
 @command()
-async def minecraft(ctx):
-	ctx.bot.logger.info(f"{ctx.author.name} issued `minecraft` command.")
-	mc_role = get(ctx.guild.roles, id=836949920488488970)
-	if mc_role not in ctx.author.roles:
-		await ctx.author.add_roles(mc_role)
-		await ctx.reply("Tu devrais maintenant avoir le rôle 'Minecraft'.")
-	else:
-		ctx.bot.logger.warning(
-			f"{ctx.author.name} already had the 'Minecraft' role."
-		)
-		await ctx.reply("Tu avais déjà le rôle 'Minecraft'.")
-
-
-@command("remove-minecraft")
-async def remove_minecraft(ctx):
-	ctx.bot.logger.info(f"{ctx.author.name} issued `remove-minecraft` command.")
-	mc_role = get(ctx.guild.roles, id=836949920488488970)
-	if mc_role in ctx.author.roles:
-		await ctx.author.remove_roles(mc_role)
-		await ctx.reply("Tu ne devrais plus avoir le rôle 'Minecraft'.")
-	else:
-		ctx.bot.logger.warning(
-			f"{ctx.author.name} didn't have the 'Minecraft' role."
-		)
-		await ctx.reply("Tu n'avais pas le rôle 'Minecraft'.")
-
-
-@command()
-async def portal(ctx):
-	ctx.bot.logger.info(f"{ctx.author.name} issued `portal` command.")
-	await ctx.reply(
-		"Il est très bien le jeu, mais n'y a pas de rôle correspondant."
-	)
-
-
-@command()
 async def groupe(ctx, group_nickname):
 	ctx.bot.logger.info(
 		f"{ctx.author.name} issued `groupe` command,"
@@ -119,5 +83,5 @@ async def groupe(ctx, group_nickname):
 
 
 bot_commands = (
-	help, ping, next, sendsend, minecraft, remove_minecraft, portal, groupe
+	help, ping, next, sendsend, groupe
 )
