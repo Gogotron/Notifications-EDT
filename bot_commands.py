@@ -103,7 +103,7 @@ async def groupe(ctx, group_nickname):
 		else:
 			for other_role in map(
 				lambda x: get(ctx.guild.roles, id=x),
-				ctx.bot.nickname_to_id[group_nickname]
+				ctx.bot.nickname_to_id.values()
 			):
 				if other_role in ctx.author.roles:
 					await ctx.author.remove_roles(other_role)
