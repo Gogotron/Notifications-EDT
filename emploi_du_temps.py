@@ -93,7 +93,7 @@ def parse_event(event: dict) -> dict:
             parsed_event['staff'] = [field]
         else:
             if parsed_event['notes']:
-                parsed_event['notes'] += field
+                parsed_event['notes'] += ' '+field
             else:
                 parsed_event['notes'] = field
     return parsed_event
