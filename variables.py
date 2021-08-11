@@ -1,13 +1,6 @@
 prefix = "$"
 
 
-class WebApiURL:
-	DOMAIN          = 'https://ukit.kbdev.io/Home/'
-	GROUPS          = 'ReadResourceListItems'
-	CALENDARDATA    = 'GetCalendarData'
-	SIDEBAR         = 'GetSideBarEvent'
-
-
 channel = 802640238664351826
 
 MI_groups = (

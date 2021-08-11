@@ -2,7 +2,13 @@ import requests
 from html.parser import unescape
 from helper_functs import sorted_schedule, event_timeint
 from datetime import datetime
-from variables import WebApiURL
+
+
+class WebApiURL:
+	DOMAIN          = 'https://ukit.kbdev.io/Home/'
+	GROUPS          = 'ReadResourceListItems'
+	CALENDARDATA    = 'GetCalendarData'
+	SIDEBAR         = 'GetSideBarEvent'
 
 
 def get_groups() -> map:
