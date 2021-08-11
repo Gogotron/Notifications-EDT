@@ -5,10 +5,10 @@ from datetime import datetime
 
 
 class WebApiURL:
-	DOMAIN          = 'https://ukit.kbdev.io/Home/'
-	GROUPS          = 'ReadResourceListItems'
-	CALENDARDATA    = 'GetCalendarData'
-	SIDEBAR         = 'GetSideBarEvent'
+    DOMAIN          = 'https://ukit.kbdev.io/Home/'
+    GROUPS          = 'ReadResourceListItems'
+    CALENDARDATA    = 'GetCalendarData'
+    SIDEBAR         = 'GetSideBarEvent'
 
 
 def get_groups() -> map:
