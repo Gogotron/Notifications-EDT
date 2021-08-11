@@ -58,7 +58,11 @@ def parse_event(event: dict) -> dict:
         'day':       0,
         'date':      tuple(map(int, event['start'].split('T')[0].split('-'))),
         'starttime': event['start'].split('T')[1],
-        'endtime':   event['end']  .split('T')[1],
+        'endtime':   (
+            event['end'].split('T')[1]
+            if not event['allDay']
+            else '20:30:00'
+        ),
         'startint':  event_timeint(event, 'start'),
         'endint':    event_timeint(event, 'end'),
         'timeint':   event_timeint(event),
