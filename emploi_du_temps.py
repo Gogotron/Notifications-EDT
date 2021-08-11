@@ -31,7 +31,7 @@ def is_room(field: str) -> bool:
     return '/' in field
 
 
-def get_calendar(group: str):
+def get_calendar(group: str) -> dict:
     data = {
         'start': '2021-09-03',
         'end': '2021-12-17',
