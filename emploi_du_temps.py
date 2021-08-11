@@ -70,7 +70,11 @@ def parse_event(event: dict) -> dict:
             else '20:30:00'
         ),
         'startint':  event_timeint(event, 'start'),
-        'endint':    event_timeint(event, 'end'),
+        'endint':    (
+            event_timeint(event, 'end')
+            if not event['allDay']
+            else event_timeint(event, 'start')//10000*10000+2030
+        ),
         'timeint':   event_timeint(event),
         'module':    event['modules'] and event['modules'][0],
         'category':  event['eventCategory'],
