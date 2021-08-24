@@ -16,6 +16,7 @@ def main():
 		group_to_mention, MI_groups, help_text
 	)
 	bot.run(getenv("TOKEN"))
+	bot.logger.warning("Shutdown!")
 	logging.shutdown()
 
 
