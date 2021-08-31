@@ -21,7 +21,7 @@ async def ping(ctx):
 async def next(ctx, group_nickname="", n="1"):
 	ctx.bot.logger.info(
 		f"{ctx.author.name} issued `next` command,"
-		f" with arguments `{group_nickname}` `{n}`."
+		f" with arguments `{group_nickname!r}` `{n!r}`."
 	)
 	if len(ctx.bot.schedule) == 0:
 		ctx.bot.logger.warning(
@@ -55,13 +55,13 @@ async def sendsend(ctx):
 async def groupe(ctx, group_nickname):
 	ctx.bot.logger.info(
 		f"{ctx.author.name} issued `groupe` command,"
-		f" with argument `{group_nickname}`."
+		f" with argument `{group_nickname!r}`."
 	)
 	if group_nickname in ctx.bot.nickname_to_id:
 		role = get(ctx.guild.roles, id=ctx.bot.nickname_to_id[group_nickname])
 		if role in ctx.author.roles:
 			ctx.bot.logger.warning(
-				f"{ctx.author.name} already had the '{group_nickname}' role."
+				f"{ctx.author.name} already had the `{group_nickname!r}` role."
 			)
 			await ctx.reply(f"Tu avais déjà le rôle '{group_nickname}'.")
 		else:
@@ -77,7 +77,7 @@ async def groupe(ctx, group_nickname):
 			)
 	else:
 		ctx.bot.logger.warning(
-			f"'{group_nickname}' has no corresponding role."
+			f"`{group_nickname!r}` has no corresponding role."
 		)
 		await ctx.reply(f"Le rôle '{group_nickname}' n'est pas disponible.")
 
