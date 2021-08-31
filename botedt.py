@@ -183,9 +183,8 @@ class BotEDT(Bot):
 			for group in groups:
 				msg_txt += f"{group}\n"
 				if group in self.group_to_mention:
-					for role in self.group_to_mention[group]:
-						if role not in mentions:
-							mentions.append(role)
+					role = self.group_to_mention[group]
+					mentions.append(role)
 		msg_txt += "```"
 
 		if len(mentions) != 0 and notify:
