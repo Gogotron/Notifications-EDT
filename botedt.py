@@ -76,7 +76,7 @@ class BotEDT(Bot):
 
 	def remove_past_events(self):
 		self.logger.info("Trimming schedule.")
-		while self.event_available(self):
+		while self.event_available():
 			del self.schedule[0]
 
 	@loop(seconds=120)
