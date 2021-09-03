@@ -60,7 +60,7 @@ class BotEDT(Bot):
 	def attempt_to_update(self):
 		# A schedule is only valid for the day it was retrieved on.
 		# Anytime after, the schedule is considered 'expired'.
-		self.logger.info("Check if schedule expired.")
+		# self.logger.info("Check if schedule expired.")
 		if self.last_update != current_dateint():
 			self.logger.info("Schedule expired, need a new one.")
 			self.update_schedule()
@@ -81,7 +81,7 @@ class BotEDT(Bot):
 
 	@loop(seconds=120)
 	async def check_for_event(self):
-		self.logger.info("Schedule loop iteration.")
+		# self.logger.info("Schedule loop iteration.")
 		self.attempt_to_update()
 
 		while self.event_available():
@@ -96,7 +96,6 @@ class BotEDT(Bot):
 
 	@check_for_event.before_loop
 	async def before_check_for_event(self):
-		print("Before loop")
 		self.logger.info("Schedule loop starts.")
 		self.update_schedule()
 		self.logger.info("Wait for bot to log in.")
@@ -104,7 +103,6 @@ class BotEDT(Bot):
 
 	@check_for_event.after_loop
 	async def after_check_for_event(self):
-		print("After loop")
 		self.logger.warning("Schedule loop is no longer running.")
 		await self.client.get_channel(801041584870916118).send(
 			"After loop: the program is no longer running.\n<@310836324766580738>"
