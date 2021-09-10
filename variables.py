@@ -7,8 +7,12 @@ MI_groups = (
 	'MA301A1', 'MA301A2', 'MA301A3',
 	'MI301A1', 'MI301A2',
 	'IN301A1', 'IN301A2', 'IN301A3', 'IN301A4', 'IN301A5',
+	'ISI301A1',
 )
-group_nicknames = tuple(group[:2]+group[6:] for group in MI_groups)
+group_nicknames = tuple(
+	group[:2]+group[6:]
+	for group in MI_groups[:-1]
+) + ('ISI',)
 
 role_ids = (
 	870986677823352882,  # MA1
@@ -21,6 +25,7 @@ role_ids = (
 	870988893653184562,  # IN3
 	870988990558392340,  # IN4
 	870989217994514482,  # IN5
+	802578798444675113,  # ISI
 )
 role_mentions = tuple(f"<@&{role_id}>" for role_id in role_ids)
 
