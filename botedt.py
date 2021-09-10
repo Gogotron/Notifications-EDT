@@ -104,7 +104,7 @@ class BotEDT(Bot):
 	@check_for_event.after_loop
 	async def after_check_for_event(self):
 		self.logger.warning("Schedule loop is no longer running.")
-		await self.client.get_channel(801041584870916118).send(
+		await self.get_channel(801041584870916118).send(
 			"After loop: the program is no longer running.\n<@310836324766580738>"
 		)
 
