@@ -23,6 +23,7 @@ async def next(ctx, group_nickname="", n="1"):
 		f"{ctx.author.name} issued `next` command,"
 		f" with arguments `{group_nickname!r}` `{n!r}`."
 	)
+	group_nickname = group_nickname.upper()
 	if len(ctx.bot.schedule) == 0:
 		ctx.bot.logger.warning(
 			"Schedule was empty, `next` command didn't return anything."
@@ -57,6 +58,7 @@ async def groupe(ctx, group_nickname):
 		f"{ctx.author.name} issued `groupe` command,"
 		f" with argument `{group_nickname!r}`."
 	)
+	group_nickname = group_nickname.upper()
 	if group_nickname in ctx.bot.nickname_to_id:
 		role = get(ctx.guild.roles, id=ctx.bot.nickname_to_id[group_nickname])
 		if role in ctx.author.roles:
