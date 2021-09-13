@@ -34,7 +34,7 @@ def is_staff(field: str) -> bool:
 
 
 def is_room(field: str) -> bool:
-    return '/' in field
+    return '/' in field or 'CREMI -' in field
 
 
 def get_calendar(group: str) -> dict:
