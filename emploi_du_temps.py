@@ -112,5 +112,5 @@ def get_combined_schedule(groups: list) -> list:
 
 
 if __name__ == '__main__':
-    from variables import MI_groups
-    sche = get_combined_schedule(MI_groups)
+    from variables import groups
+    sche = get_combined_schedule(groups)

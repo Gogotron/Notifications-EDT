@@ -3,7 +3,9 @@ from discord.ext.tasks import loop
 from bot_commands import bot_commands
 from emploi_du_temps import get_combined_schedule
 from links import get_link
-from helper_functs import event_to_seconds, current_dateint, current_timeint
+from helper_functs import (
+	event_to_seconds, current_dateint, current_timeint, role_id_to_mention
+)
 from time import time, sleep
 import logging
 
@@ -13,10 +15,10 @@ class BotEDT(Bot):
 		self,
 		prefix: str,
 		channel: int,
-		nickname_to_id: dict,
-		group_to_mention: dict,
-		groups: list,
-		help_text: str
+		help_text: str,
+		groups: tuple,
+		nicknames: tuple,
+		role_ids: tuple,
 	):
 		self.logger = logging.getLogger(__name__)
 		self.logger.setLevel(logging.DEBUG)
@@ -38,9 +40,21 @@ class BotEDT(Bot):
 		self.logger.info("Finished adding commands to bot.")
 
 		self.channel = channel
-		self.nickname_to_id = nickname_to_id
-		self.group_to_mention = group_to_mention
 		self.groups = groups
+		self.nicknames = nicknames
+		self.role_ids = role_ids
+		self.nickname_to_group = {
+			nickname: group
+			for nickname, group in zip(nicknames, groups)
+		}
+		self.nickname_to_role_id = {
+			nickname: role_id
+			for nickname, role_id in zip(nicknames, role_ids)
+		}
+		self.group_to_role_id = {
+			group: role_id
+			for group, role_id in zip(groups, role_ids)
+		}
 		self.help_text = help_text
 		self.schedule = []
 		self.last_update = None
@@ -180,8 +194,8 @@ class BotEDT(Bot):
 		if groups:
 			for group in groups:
 				msg_txt += f"{group}\n"
-				if group in self.group_to_mention:
-					role = self.group_to_mention[group]
+				if group in self.groups:
+					role = role_id_to_mention(self.group_to_role_id[group])
 					mentions.append(role)
 		msg_txt += "```"
 
@@ -202,10 +216,10 @@ class BotEDT(Bot):
 			group_name = group_nickname[:2]+'301A'+group_nickname[2:]
 		valid_groups = tuple(filter(
 			lambda x: x.startswith(group_name),
-			list(self.group_to_mention.keys())
+			list(self.groups)
 		))
 		if len(valid_groups) == 0:
 			self.logger.warning(f"Found no groups whose nickname is {group_nickname}.")
-			return tuple(self.group_to_mention.keys())
+			return tuple(self.groups)
 		else:
 			return valid_groups

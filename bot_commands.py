@@ -59,7 +59,7 @@ async def groupe(ctx, group_nickname):
 		f" with argument `{group_nickname!r}`."
 	)
 	group_nickname = group_nickname.upper()
-	if group_nickname in ctx.bot.nickname_to_id:
+	if group_nickname in ctx.bot.nicknames:
 		role = get(ctx.guild.roles, id=ctx.bot.nickname_to_id[group_nickname])
 		if role in ctx.author.roles:
 			ctx.bot.logger.warning(
@@ -69,7 +69,7 @@ async def groupe(ctx, group_nickname):
 		else:
 			for other_role in map(
 				lambda x: get(ctx.guild.roles, id=x),
-				ctx.bot.nickname_to_id.values()
+				ctx.bot.role_ids
 			):
 				if other_role in ctx.author.roles:
 					await ctx.author.remove_roles(other_role)

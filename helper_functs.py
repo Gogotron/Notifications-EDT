@@ -73,3 +73,7 @@ def remove_non_PI(L: list) -> filter:
 
 def event_to_seconds(e: dict) -> float:
 	return mktime(strptime(str(e["timeint"]), "%Y%m%d%H%M"))
+
+
+def role_id_to_mention(role_id):
+	return f"<@&{role_id}>"
