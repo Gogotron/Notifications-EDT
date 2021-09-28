@@ -60,7 +60,7 @@ async def groupe(ctx, group_nickname):
 	)
 	group_nickname = group_nickname.upper()
 	if group_nickname in ctx.bot.nicknames:
-		role = get(ctx.guild.roles, id=ctx.bot.nickname_to_id[group_nickname])
+		role = get(ctx.guild.roles, id=ctx.bot.nickname_to_role_id[group_nickname])
 		if role in ctx.author.roles:
 			ctx.bot.logger.warning(
 				f"{ctx.author.name} already had the `{group_nickname!r}` role."
