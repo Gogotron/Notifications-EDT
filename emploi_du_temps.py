@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 class WebApiURL:
-    DOMAIN          = 'https://ukit.kbdev.io/Home/'
+    DOMAIN          = 'https://celcat.u-bordeaux.fr/Calendar/Home/'
     GROUPS          = 'ReadResourceListItems'
     CALENDARDATA    = 'GetCalendarData'
     SIDEBAR         = 'GetSideBarEvent'
