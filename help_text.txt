@@ -12,3 +12,6 @@ En plus, 15 minutes avant chaque cours, Notifications EDT envoi un message avec 
 
   `$groupe [groupe]`
 Attribue le rôle [groupe]. Par exemple `$groupe IN4` attribue le rôle IN4 correspondant au groupe IN301A4.
+
+  `$donate`
+Donne des informations sur comment faire une donation.

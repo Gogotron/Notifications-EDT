@@ -84,6 +84,19 @@ async def groupe(ctx, group_nickname):
 		await ctx.reply(f"Le rôle '{group_nickname}' n'est pas disponible.")
 
 
+@command()
+async def donate(ctx):
+	await ctx.reply(
+		"Tu peux faire une donation à\n"
+		"Monero: "
+		"89dLqfcdyFQVSuNU6fK"
+		"vAYcqXubj1ouqHWUZ7g"
+		"rDjeXk2ggxrReBayjDP"
+		"wHHGNbRfUKjq2iMYEHx"
+		"DCsgNsYwACwg3j5jf2w"
+	)
+
+
 bot_commands = (
-	help, ping, next, sendsend, groupe
+	help, ping, next, sendsend, groupe, donate
 )
