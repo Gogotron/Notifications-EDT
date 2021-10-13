@@ -31,5 +31,5 @@ role_ids = (
 )
 
 
-with open("help_text.txt", "r") as f:
+with open("help_text.md", "r") as f:
 	help_text = f.read().strip()
