@@ -39,8 +39,8 @@ def is_room(field: str) -> bool:
 
 def get_calendar(group: str) -> dict:
     data = {
-        'start': '2021-09-03',
-        'end': '2021-12-17',
+        'start': '2022-01-01',
+        'end': '2022-07-31',
         'resType': '103',
         'calView': 'agendaDay',
         'federationIds[]': group,
