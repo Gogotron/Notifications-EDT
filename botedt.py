@@ -211,9 +211,11 @@ class BotEDT(Bot):
 	def corresponding_groups(self, group_nickname: str) -> tuple:
 		self.logger.info(f"Getting groups whose nickname is {group_nickname}.")
 		if group_nickname == 'ISI':
-			group_name = 'ISI301A1'
+			group_name = 'ISI401A1'
 		elif len(group_nickname) >= 2:
-			group_name = group_nickname[:2]+'301A'+group_nickname[2:]
+			group_name = group_nickname[:2]+'401A'+group_nickname[2:]
+        else:
+            group_name = group_nickname
 		valid_groups = tuple(filter(
 			lambda x: x.startswith(group_name),
 			list(self.groups)
