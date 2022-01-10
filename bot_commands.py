@@ -81,7 +81,11 @@ async def groupe(ctx, group_nickname):
 		ctx.bot.logger.warning(
 			f"`{group_nickname!r}` has no corresponding role."
 		)
-		await ctx.reply(f"Le rôle '{group_nickname}' n'est pas disponible.")
+		await ctx.reply(
+            f"Le rôle '{group_nickname}' n'est pas disponible.\n"
+            +'Les rôles disponibles sont:\n'
+            +', '.join(ctx.bot.roles)
+        )
 
 
 @command()
