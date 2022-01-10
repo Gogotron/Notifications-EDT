@@ -32,6 +32,7 @@ role_ids = (
 	921858736690180096,  # INF4
 	921858753656139776,  # INF5
 )
+assert len(role_ids)==len(set(role_ids))
 
 
 with open("help_text.md", "r") as f:
