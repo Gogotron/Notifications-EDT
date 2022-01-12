@@ -122,8 +122,8 @@ class BotEDT(Bot):
 			"After loop: the program is no longer running.\n<@310836324766580738>"
 		)
 
-	def next_class(self, n: int, group_nickname: str):
-		valid_groups = self.corresponding_groups(group_nickname)
+	def next_class(self, n: int, nickname: str):
+		valid_groups = self.corresponding_groups(nickname)
 		i = 0
 		while n >= 0 and i < len(self.schedule):
 			if self.schedule[i]["groups"]:
@@ -208,20 +208,18 @@ class BotEDT(Bot):
 
 		return msg_txt
 
-	def corresponding_groups(self, group_nickname: str) -> tuple:
-		self.logger.info(f"Getting groups whose nickname is {group_nickname}.")
-		if group_nickname == 'ISI':
-			group_name = 'ISI401A1'
-		elif len(group_nickname) >= 2:
-			group_name = group_nickname[:2]+'401A'+group_nickname[2:]
-		else:
-			group_name = group_nickname
+	def corresponding_groups(self, nickname: str) -> tuple:
+		self.logger.info(f"Getting groups whose nickname is {nickname}.")
+		if nickname in self.groups:
+			return (nickname,)
+		if nickname in self.nicknames:
+			return (self.nickname_to_group[nickname],)
 		valid_groups = tuple(filter(
-			lambda x: x.startswith(group_name),
+			lambda x: x.startswith(nickname),
 			list(self.groups)
 		))
 		if len(valid_groups) == 0:
-			self.logger.warning(f"Found no groups whose nickname is {group_nickname}.")
-			return tuple(self.groups)
+			self.logger.warning(f"Found no groups whose nickname is {nickname}.")
+			return self.groups
 		else:
 			return valid_groups

@@ -18,12 +18,12 @@ async def ping(ctx):
 
 
 @command()
-async def next(ctx, group_nickname="", n="1"):
+async def next(ctx, nickname="", n="1"):
 	ctx.bot.logger.info(
 		f"{ctx.author.name} issued `next` command,"
-		f" with arguments `{group_nickname!r}` `{n!r}`."
+		f" with arguments `{nickname!r}` `{n!r}`."
 	)
-	group_nickname = group_nickname.upper()
+	nickname = nickname.upper()
 	if len(ctx.bot.schedule) == 0:
 		ctx.bot.logger.warning(
 			"Schedule was empty, `next` command didn't return anything."
@@ -31,13 +31,13 @@ async def next(ctx, group_nickname="", n="1"):
 		await ctx.reply("L'emploi du temps est vide.")
 		return
 	n = int(n) - 1
-	if group_nickname == "":
+	if nickname == "":
 		if n >= len(ctx.bot.schedule):
 			e = ctx.bot.schedule[-1]
 		else:
 			e = ctx.bot.schedule[n]
 	else:
-		e = ctx.bot.next_class(n, group_nickname)
+		e = ctx.bot.next_class(n, nickname)
 	await ctx.bot.send_event(e, False, ctx)
 
 
@@ -53,19 +53,19 @@ async def sendsend(ctx):
 
 
 @command()
-async def groupe(ctx, group_nickname):
+async def groupe(ctx, nickname):
 	ctx.bot.logger.info(
 		f"{ctx.author.name} issued `groupe` command,"
-		f" with argument `{group_nickname!r}`."
+		f" with argument `{nickname!r}`."
 	)
-	group_nickname = group_nickname.upper()
-	if group_nickname in ctx.bot.nicknames:
-		role = get(ctx.guild.roles, id=ctx.bot.nickname_to_role_id[group_nickname])
+	nickname = nickname.upper()
+	if nickname in ctx.bot.nicknames:
+		role = get(ctx.guild.roles, id=ctx.bot.nickname_to_role_id[nickname])
 		if role in ctx.author.roles:
 			ctx.bot.logger.warning(
-				f"{ctx.author.name} already had the `{group_nickname!r}` role."
+				f"{ctx.author.name} already had the `{nickname!r}` role."
 			)
-			await ctx.reply(f"Tu avais déjà le rôle '{group_nickname}'.")
+			await ctx.reply(f"Tu avais déjà le rôle '{nickname}'.")
 		else:
 			for other_role in map(
 				lambda x: get(ctx.guild.roles, id=x),
@@ -75,14 +75,14 @@ async def groupe(ctx, group_nickname):
 					await ctx.author.remove_roles(other_role)
 			await ctx.author.add_roles(role)
 			await ctx.reply(
-				f"Tu devrais maintenant avoir le rôle '{group_nickname}'."
+				f"Tu devrais maintenant avoir le rôle '{nickname}'."
 			)
 	else:
 		ctx.bot.logger.warning(
-			f"`{group_nickname!r}` has no corresponding role."
+			f"`{nickname!r}` has no corresponding role."
 		)
 		await ctx.reply(
-            f"Le rôle '{group_nickname}' n'est pas disponible.\n"
+            f"Le rôle '{nickname}' n'est pas disponible.\n"
             +'Les rôles disponibles sont:\n'
             +', '.join(ctx.bot.roles)
         )
